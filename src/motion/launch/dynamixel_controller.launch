@@ -1,0 +1,26 @@
+<launch>
+  <arg name="use_robot_name"         default="eros"/>
+  <arg name="device_name"            default="/dev/ttyUSB0"/>
+  <arg name="baud_rate"              default="1000000"/>
+  <arg name="protocol_version"       default="2.0"/>
+
+  <arg name="joint_controller"       default="position_mode"/>
+
+  <arg name="joint1_id"              default="1"/>
+  <arg name="joint3_id"              default="3"/>
+  <arg name="joint5_id"              default="5"/>
+
+  <node pkg="motion" type="dynamixel_controller" name="dynamixel_controller" required="true" output="screen">
+    <param name="robot_name"           value="$(arg use_robot_name)"/>
+    <param name="device_name"          value="$(arg device_name)"/>
+    <param name="baud_rate"            value="$(arg baud_rate)"/>
+    <param name="protocol_version"     value="$(arg protocol_version)"/>
+
+    <param name="joint_controller"     value="$(arg joint_controller)"/>
+
+    <param name="joint1_id"            value="$(arg joint1_id)"/>
+    <param name="joint3_id"            value="$(arg joint3_id)"/>
+    <param name="joint5_id"            value="$(arg joint5_id)"/>
+    
+  </node>
+</launch>

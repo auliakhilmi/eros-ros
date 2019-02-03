@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>motion</name>
+  <version>0.0.0</version>
+  <description>Motion Module</description>
+  <author email="auliakhilmirizgi@gmail.com">Aulia Khilmi Rizgi</author>
+  <maintainer email="eepiseros@gmail.com">eros</maintainer>
+  <license>TODO</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>robotcontrol</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>dynamixel_sdk</depend>
+  <depend>dynamixel_workbench_toolbox</depend>
+</package>

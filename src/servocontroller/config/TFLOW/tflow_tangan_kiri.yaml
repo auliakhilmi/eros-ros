@@ -1,0 +1,38 @@
+joint16_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_kiri_pitch
+    joint_speed: 0.3
+    motor:
+        id: 16
+        init: 2048
+        min: 0
+        max: 4095
+
+joint18_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_kiri_roll
+    joint_speed: 0.3
+    motor:
+        id: 18
+        init: 2048
+        min: 0
+        max: 4095
+
+joint22_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: siku_kiri_pitch
+    joint_speed: 0.3
+    motor:
+        id: 22
+        init: 2048
+        min: 0
+        max: 4095

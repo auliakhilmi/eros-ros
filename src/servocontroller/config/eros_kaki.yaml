@@ -1,0 +1,155 @@
+joint7_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bokong_putar_kanan
+    joint_speed: 0.5
+    motor:
+        id: 7
+        init: 886
+        min: 0
+        max: 4095
+
+joint8_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bokong_putar_kiri
+    joint_speed: 0.5
+    motor:
+        id: 8
+        init: 515
+        min: 0
+        max: 4095
+
+joint9_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bokong_kanan
+    joint_speed: 0.5
+    motor:
+        id: 9
+        init: 2048
+        min: 0
+        max: 4095
+
+joint10_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bokong_kiri
+    joint_speed: 0.5
+    motor:
+        id: 10
+        init: 1934
+        min: 0
+        max: 4095
+
+joint11_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: pangkalpaha_kanan
+    joint_speed: 0.5
+    motor:
+        id: 11
+        init: 2048
+        min: 0
+        max: 4095
+        
+joint12_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: pangkalpaha_kiri
+    joint_speed: 0.5
+    motor:
+        id: 12
+        init: 2533
+        min: 0
+        max: 4095
+
+joint13_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: lutut_kanan
+    joint_speed: 0.5
+    motor:
+        id: 13
+        init: 2048
+        min: 0
+        max: 4095
+        
+joint14_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: lutut_kiri
+    joint_speed: 0.5
+    motor:
+        id: 14
+        init: 2083
+        min: 0
+        max: 4095
+
+joint15_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: engkeldepan_kanan
+    joint_speed: 0.5
+    motor:
+        id: 15
+        init: 2048
+        min: 0
+        max: 4095
+
+joint16_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: engkeldepan_kiri
+    joint_speed: 0.5
+    motor:
+        id: 16
+        init: 2387
+        min: 0
+        max: 4095
+
+joint17_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: engkelbelakang_kanan
+    joint_speed: 0.5
+    motor:
+        id: 17
+        init: 2078
+        min: 0
+        max: 4095
+
+joint18_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: engkelbelakang_kiri
+    joint_speed: 0.5
+    motor:
+        id: 18
+        init: 1979
+        min: 0
+        max: 4095

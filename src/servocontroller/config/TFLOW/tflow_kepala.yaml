@@ -1,0 +1,38 @@
+joint32_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: kepala_yaw
+    joint_speed: 0.3
+    motor:
+        id: 32
+        init: 2048
+        min: 0
+        max: 4095
+
+joint33_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: kepala_pitch
+    joint_speed: 0.3
+    motor:
+        id: 33
+        init: 2048
+        min: 0
+        max: 4095
+
+joint34_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: kepala_roll
+    joint_speed: 0.3
+    motor:
+        id: 34
+        init: 2048
+        min: 0
+        max: 4095

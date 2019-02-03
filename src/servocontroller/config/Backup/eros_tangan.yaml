@@ -1,0 +1,77 @@
+joint1_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_putar_kanan
+    joint_speed: 1.0
+    motor:
+        id: 1
+        init: 1840
+        min: 0
+        max: 4095
+
+joint2_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_putar_kiri
+    joint_speed: 1.0
+    motor:
+        id: 2
+        init: 1837
+        min: 0
+        max: 4095
+
+joint3_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_angkat_kanan
+    joint_speed: 1.0
+    motor:
+        id: 3
+        init: 3145
+        min: 2158
+        max: 4095
+
+joint4_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: bahu_angkat_kiri
+    joint_speed: 1.0
+    motor:
+        id: 4
+        init: 1051
+        min: 40
+        max: 1954
+
+joint5_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: siku_kanan
+    joint_speed: 1.0
+    motor:
+        id: 5
+        init: 2952
+        min: 999
+        max: 2952
+
+joint6_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: siku_kiri
+    joint_speed: 1.0
+    motor:
+        id: 6
+        init: 942
+        min: 939
+        max: 2863

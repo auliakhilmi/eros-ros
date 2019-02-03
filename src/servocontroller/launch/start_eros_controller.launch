@@ -1,0 +1,15 @@
+<launch>
+    <rosparam file="$(find servocontroller)/config/eros_kaki.yaml" command="load"/>
+    <rosparam file="$(find servocontroller)/config/eros_tangan.yaml" command="load"/>
+    <rosparam file="$(find servocontroller)/config/eros_kepala.yaml" command="load"/>
+    <node name="controller_spawner" pkg="dynamixel_controllers" type="controller_spawner.py"
+          args="--manager=dxl_manager
+                --port eros_servo
+                joint9_controller
+                joint11_controller
+                joint13_controller
+                joint15_controller
+                "
+        output="screen"/>
+</launch>
+

@@ -1,0 +1,12 @@
+<launch>
+<arg name="model" />
+<param name="robot_description" textfile="$(find robotmodel)/urdf/eros.urdf" />
+<param name="use_gui" value="true"/>
+<node name="state_publisher" pkg="robotmodel"
+type="state_publisher" />
+<node name="serialserver" pkg="serial"
+type="serialserver" />
+<node name="robot_state_publisher" pkg="robot_state_publisher"
+type="state_publisher" />
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotmodel)/rviz/urdf_odom.rviz" required="true" />
+</launch>

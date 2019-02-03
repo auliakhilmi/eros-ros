@@ -1,0 +1,38 @@
+joint13_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: badan_roll
+    joint_speed: 0.3
+    motor:
+        id: 13
+        init: 2048
+        min: 0
+        max: 4095
+
+joint14_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: badan_pitch
+    joint_speed: 0.3
+    motor:
+        id: 14
+        init: 2048
+        min: 0
+        max: 4095
+
+joint15_controller:
+    controller:
+        package: dynamixel_controllers
+        module: joint_position_controller
+        type: JointPositionController
+    joint_name: badan_yaw
+    joint_speed: 0.3
+    motor:
+        id: 15
+        init: 2048
+        min: 0
+        max: 4095

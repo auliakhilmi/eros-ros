@@ -1,0 +1,10 @@
+<launch>
+<arg name="model" />
+<param name="robot_description" command="$(find xacro)/xacro.py $(find robotmodel)/urdf/tflow.xacro"/>
+<param name="use_gui" value="true"/>
+<node name="motion_control" pkg="motion"
+type="motion_control" />
+<node name="robot_state_publisher" pkg="robot_state_publisher"
+type="state_publisher" />
+<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robotmodel)/urdf.rviz" required="true" />
+</launch>
