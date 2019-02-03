@@ -389,7 +389,7 @@ void Motion4step::TrajectoryShooting(int fMth){
         }
     }else if(cKick==120){
         for(i = 10; i < 18 ; i++){
-                //DS_Origin[i] = GoalPosition[i];
+                DS_Origin[i] = GoalPosition[i];
         }
         //EnStabil = ON;
         ChangeDataAction(fMth);step=1;theta=0;T=0;lastfMth = 0;cKick=147; 
@@ -414,7 +414,7 @@ void Motion4step::TrajectoryShooting(int fMth){
         }
     }else if(cKick==210){
         for(i = 0; i < 18 ; i++){
-            //DS_Origin[i] = DS_Backup[i];
+            DS_Origin[i] = DS_Backup[i];
         }
         state=WALK; counter=0; dcount=16; step = 1; ReadyToKick=false;
         ChangeDataMotion(0);
