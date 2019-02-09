@@ -41,17 +41,11 @@ void MotionControl::initSerial(){
 }
 
 void MotionControl::InertialFeedback(){
-    int tresh_y, tresh_x;
-    double Xgyro,Ygyro;
-    double err_x,err_y;
-    double pI,XX,D_x,Y;
-    double MassHead;
-
     tresh_x=0;
     tresh_y=0;
     MassHead=0;
 
-    if(CONTROL_ENABLE){
+    if(control_enable){
         err_y=acc1-tresh_y;
         Y=err_y*3+(err_y-lastErr_y)*5+(err_y+lastErr_y)*2;
 
@@ -134,19 +128,34 @@ void MotionControl::razorCallback(const robotcontrol::Razor::ConstPtr &msg){
     acc2 = msg->acc2;
     gyro1 = msg->gyro1;
     gyro2 = msg->gyro2;
+
+    //-------------------------
+    //Fall Detection// DataJatuh_total as parameter for fallDetect
+    countJatuh++;
+    DataJatuh+=acc2;
+    if(countJatuh>=10){
+      DataJatuh_total=(DataJatuh/10);
+      countJatuh=DataJatuh=0;
+    }
+    //-------------------------
+
     //ROS_INFO("[%d][%d][%d][%d]",acc1,acc2,gyro1,gyro2);
 }
 
 void MotionControl::motionCallback(const robotcontrol::Motion::ConstPtr &msg){
-	motion = msg->motion;
-	state  = msg->state;
-	headX  = msg->headX;
-	headY  = msg->headY;
+	if(state!=STANDUP){
+        motion = msg->motion;
+        state  = msg->state;
+        headX  = msg->headX;
+        headY  = msg->headY;
+    }
 	//ROS_INFO("[%d][%d][%d][%d]",motion,state,headX,headY);
-  ChangeState();
+    ChangeState();
 	//Head Controller
-	GoalPosition[18]=headY;
-  GoalPosition[19]=headX;
+    if(HeadControl){
+        GoalPosition[18]=headY;
+        GoalPosition[19]=headX;
+    }
 }
 
 void MotionControl::initPublisher(){
@@ -295,33 +304,136 @@ void MotionControl::ChangeState(){
 		setDXLData(254,32,1023);
 		setDXLData(254,32,1023);
 	}else
-  if(state==WALK && last_state==KICK){
-    ROS_INFO("Walk Again..");
-  }
+    if(state==WALK && last_state==KICK){
+        ROS_INFO("Walk Again..");
+    }
 
 	last_state=state;
 }
 
 void MotionControl::State(){
+    InertialFeedback();
 	if(state==READY){
-		InertialFeedback();
+        m4.FallDetect();
 		m4.BasicMotionFSM();
 	}else 
 	if(state==WALK){
-		InertialFeedback();
+        m4.FallDetect();
 		m4.StepTrajectoryWalking(motion);
+        basicMotion();
 	}else
 	if(state==KICK){
-        InertialFeedback();
+        m4.FallDetect();
         if(!ReadyToKick){
             m4.StepTrajectoryKicking();
         }else{
             m4.TrajectoryShooting(motion);
         }
+        basicMotion();
 	}else
-	if(state==GETUP){
+	if(state==FALL){
+        m4.Falling();
+	}else
+    if(state==STANDUP){
+        if(standup_phase==0){
+            StandUp();
+            counter=0;dcount=16;cMotion=0;
+        }else
+        if(standup_phase==1){
+            m4.StepMotion();
+            basicMotion();
+        }else
+        if(standup_phase==2){
+            StandUp_End();
+        }
+    }
+}
 
-	}
+void MotionControl::StandUp(){
+    HeadControl     =OFF;
+    control_enable  =OFF;
+    setDXLData1(254,24,0);
+    setDXLData1(254,24,0);
+    sleep(1000);
+    setDXLData1(254,24,1);
+    setDXLData1(254,24,1);
+    sleep(100);
+
+    m4.FallDetect();
+    state=STANDUP;
+    sleep(50);
+    setDXLData1(19,26,0);
+    setDXLData1(19,28,1);
+    if(Fall==10){
+        setDXLData(1,30,DS_Origin[0]-500);
+        setDXLData(3,30,DS_Origin[2]+1000);
+        setDXLData(10,30,DS_Origin[9]-500);
+        setDXLData(1,30,DS_Origin[0]-500);
+        setDXLData(3,30,DS_Origin[2]+1000);
+        setDXLData(10,30,DS_Origin[9]-500); 
+        sleep(1200);
+    }else
+    if(Fall==20){
+        setDXLData(2,30,DS_Origin[1]+500);
+        setDXLData(4,30,DS_Origin[3]-1000);
+        setDXLData(9,30,DS_Origin[8]+500);
+        setDXLData(2,30,DS_Origin[1]+500);
+        setDXLData(4,30,DS_Origin[3]-1000);
+        setDXLData(9,30,DS_Origin[8]+500);
+        sleep(1200);
+    }else
+    if(Fall==30){
+        setDXLData(1,30,DS_Origin[0]-500);
+        setDXLData(3,30,DS_Origin[2]+1000);
+        setDXLData(10,30,DS_Origin[9]-500);
+        setDXLData(11,30,DS_Origin[10]+300);
+        setDXLData(13,30,DS_Origin[12]-600);
+        setDXLData(15,30,DS_Origin[14]-300);
+        setDXLData(1,30,DS_Origin[0]-500);
+        setDXLData(3,30,DS_Origin[2]+1000);
+        setDXLData(10,30,DS_Origin[9]-500);
+        setDXLData(11,30,DS_Origin[10]+300);
+        setDXLData(13,30,DS_Origin[12]-600);
+        setDXLData(15,30,DS_Origin[14]-300);
+        sleep(1200);
+    }else
+    if(Fall==40){
+        setDXLData(2,30,DS_Origin[1]+500);
+        setDXLData(4,30,DS_Origin[3]-1000);
+        setDXLData(9,30,DS_Origin[8]+500);
+        setDXLData(12,30,DS_Origin[11]-300);
+        setDXLData(14,30,DS_Origin[13]+600);
+        setDXLData(16,30,DS_Origin[15]+300);
+        setDXLData(2,30,DS_Origin[1]+500);
+        setDXLData(4,30,DS_Origin[3]-1000);
+        setDXLData(9,30,DS_Origin[8]+500);
+        setDXLData(12,30,DS_Origin[11]-300);
+        setDXLData(14,30,DS_Origin[13]+600);
+        setDXLData(16,30,DS_Origin[15]+300);
+        sleep(1200);
+    }
+    standup_phase=1;
+}
+
+void MotionControl::StandUp_End(){
+    setDXLData(1,26,0);
+    setDXLData(1,28,16);      
+    setDXLData(2,26,0);
+    setDXLData(2,28,16); 
+    setDXLData(5,26,0);
+    setDXLData(5,28,16);      
+    setDXLData(6,26,0);
+    setDXLData(6,28,16); 
+    setDXLData(3,26,0);
+    setDXLData(3,28,16);      
+    setDXLData(4,26,0);
+    setDXLData(4,28,16);
+    control_enable  =ON;
+    state=WALK;
+    m4.ChangeDataMotion(0);
+    standup_phase=0;
+    sleep(1000);
+
 }
 
 int main(int argc,char** argv){
@@ -344,11 +456,9 @@ int main(int argc,char** argv){
     motion_control.setDXLData(254,32,100);
     motion_control.setDXLData(254,32,100);
     motion_control.setDXLData(254,32,100);
-
+    control_enable=true;
     while(ros::ok()){
-      motion_control.State();
-    	motion_control.basicMotion();
-
+        motion_control.State();
     	// Graph System-----------------------------------------
     	//pose_.x1=yFoot1;
     	//pose_.x2=yFoot2;

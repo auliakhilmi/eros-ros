@@ -67,6 +67,9 @@ class MotionControl{
 		void ChangeState();
 		void State();
 
+		void StandUp();
+		void StandUp_End();
+
 		void InertialFeedback();
 		void basicMotion();
 		void syncWrite();

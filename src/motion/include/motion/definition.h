@@ -1,12 +1,17 @@
 #ifndef DEFINITION_H
 #define DEFINITION_H
 
+//
+#define ON true
+#define OFF false
+
 //STATE ROBOT
 #define CONTROL_ENABLE true
 #define READY 0
 #define WALK  1
 #define KICK  2
-#define GETUP 3
+#define STANDUP 3
+#define FALL 4
 
 //STATE FALL
 #define BackFall	1

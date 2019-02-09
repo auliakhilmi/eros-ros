@@ -23,7 +23,19 @@ unsigned char Mode, Action, DataTX, DataTY, ready, it, DataPC[8], Servo[2];
 //Control Variable
 int8_t acc1=0,acc2=0,gyro1=0,gyro2=0;
 double lastErr_x,lastErr_y,lastGyroX,lastGyroY;
+double Xgyro,Ygyro;
+double err_x,err_y;
+double pI,XX,D_x,Y;
+double MassHead;
+int tresh_y, tresh_x;
+bool control_enable, HeadControl;
+///////////////////////////////////////////////
+
 bool ReadyToKick;
+int countJatuh, DataJatuh=10, DataJatuh_total=10;
+unsigned char Fall;
+int standup_phase;
+int cKick,cMotion;
 
 
 //short int GoalPosition[34];

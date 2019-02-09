@@ -17,6 +17,7 @@ class Motion4step{
       float aBody, t;        
       //float xFoot1, yFoot1, zFoot1, xFoot2, yFoot2, zFoot2, hFoot1, hFoot2;
       int motions;
+      int motion_;
       int t_action[11];
       int PatternMotion[8][8] = {
           {0, 200, 0, 0, 0, 200, 0, 0},
@@ -41,7 +42,6 @@ class Motion4step{
       int sMotion[18][11];
       float AnglePosition[34];
       int max_step;
-      int cKick;
 
       void CalculateValue();
 
@@ -57,6 +57,9 @@ class Motion4step{
         void InertialFeedback();
         void TrajectoryShooting(int fMth);
         void StepTrajectoryKicking();
+        void StepMotion();
+        void Falling();
+        void FallDetect();
 };
 
 Motion4step::Motion4step()
@@ -421,6 +424,78 @@ void Motion4step::TrajectoryShooting(int fMth){
     }
     fprintf(stderr, "cKick: %d, fMth:%d, T:%d, step:%d,\n",cKick,fMth,T,step);
     cKick++;
+}
+
+void Motion4step::Falling(){
+    state=STANDUP;
+    control_enable=OFF;
+    standup_phase=0;
+}
+
+void Motion4step::FallDetect(){
+    if((DataJatuh_total - tresh_x) < (-40)){
+        if(state!=STANDUP)  state=FALL; 
+                            Fall=FrontFall;
+        if(acc1 > 10)       Fall=10;
+        else if(acc1 < -10) Fall=20;
+    }else if((DataJatuh_total - tresh_x) < -40){
+        if(state!=STANDUP)  Fall=FrontFall;
+        if(acc1>10)         Fall=10;
+        else if(acc1<-10)   Fall=20;
+    }else if((DataJatuh_total - tresh_x) > 48){
+        if(state!=STANDUP)  state=FALL;
+                            Fall=BackFall;
+        if(acc1>10)         Fall=30;
+        else if(acc1<-10)   Fall=40;
+    }
+    if((DataJatuh_total - tresh_x) > 20 && motion < 40){
+        //yaw=0;
+        GoalPosition[19]=2050;
+        GoalPosition[18]=2500; 
+    }else if((DataJatuh_total - tresh_x) > 22 && motion >= 40){
+        GoalPosition[19]=2050;
+        GoalPosition[18]=2500; 
+    }
+}
+
+void Motion4step::StepMotion(){
+    if(cMotion==1){
+        if(Fall==BackFall   ||  Fall==30    ||  Fall==40){        
+            motion_=82; 
+        }else 
+        if(Fall==FrontFall  ||  Fall==10    ||  Fall==20){
+            GoalPosition[19]=2150;
+            GoalPosition[18]=1700; 
+            motion_=91;
+        }
+    }else
+    if(cMotion==2){
+        ChangeDataAction(motion_);step=1;theta=0;T=0;lastfMth = 0;
+    }else
+    if(cMotion==4){
+        cMotion=3;
+        for(i=0; i<18; i++){
+            Selisih=sMotion[i][step]-sMotion[i][step-1];
+            GoalPosition[i]=(int)(((VCos[T]*Selisih)/2000)+sMotion[i][step-1]+DefaultServo[i]);
+            if(i==6){
+              ROS_INFO("Selisih: %d, GP7: %d",Selisih,GoalPosition[6]);
+            }
+        }
+
+        T+=t_action[step];
+        if(T>180){
+          fprintf(stderr, "Hit!!\n");
+            T=0; step++;
+            if(step > 6){
+                cMotion=4;
+            }
+        }
+    }else
+    if(cMotion==5){
+        standup_phase=3;
+    }
+
+    cMotion++;
 }
 
 // void Motion4step::StepTrajectoryAction(int fMth)
