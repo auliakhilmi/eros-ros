@@ -22,5 +22,7 @@
 #define Phi         (float) 3.1415926535897932384626433832795
 #define DualPhi     (float) 6.283185307179586476925286766559
 
+#define ROBOT_HEIGHT 28
+
 
 #endif // DEFINITION_H

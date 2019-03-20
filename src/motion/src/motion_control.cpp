@@ -45,7 +45,7 @@ void MotionControl::InertialFeedback(){
     tresh_y=0;
     MassHead=0;
 
-    if(control_enable){
+    if(false){
         err_y=acc1-tresh_y;
         Y=err_y*3+(err_y-lastErr_y)*5+(err_y+lastErr_y)*2;
 
@@ -123,11 +123,11 @@ void MotionControl::InertialFeedback(){
     //ROS_INFO("[%1.2f][%1.2f][%1.2f][%1.2f][%1.2f]",pI,Xgyro,Ygyro,XX,Y);
 }
 
-void MotionControl::razorCallback(const robotcontrol::Razor::ConstPtr &msg){
-    acc1 = msg->acc1;
-    acc2 = msg->acc2;
-    gyro1 = msg->gyro1;
-    gyro2 = msg->gyro2;
+void MotionControl::serialCallback(const robotcontrol::LowLevel::ConstPtr &msg){
+    acc1 = msg->acc_x;
+    acc2 = msg->acc_y;
+    gyro1 = msg->gyro_x;
+    gyro2 = msg->gyro_y;
 
     //-------------------------
     //Fall Detection// DataJatuh_total as parameter for fallDetect
@@ -165,7 +165,8 @@ void MotionControl::initPublisher(){
 }
 
 void MotionControl::initSubscriber(){
-    razor_sub_ = node_handle_.subscribe("/robotcontrol/razor", 10, &MotionControl::razorCallback, this);
+    //LowLevel Subcontroller
+    serial_sub_ = node_handle_.subscribe("lowlevel", 10, &MotionControl::serialCallback, this);
     
     //Grafik servo
     dservo = node_handle_.subscribe("/setservo", 10, &MotionControl::setservo, this);
@@ -316,6 +317,7 @@ void MotionControl::State(){
 	if(state==READY){
         m4.FallDetect();
 		m4.BasicMotionFSM();
+        basicMotion();
 	}else 
 	if(state==WALK){
         m4.FallDetect();
@@ -436,13 +438,17 @@ void MotionControl::StandUp_End(){
 
 }
 
+void calculateZMP(){
+}
+
 int main(int argc,char** argv){
     ros::init(argc, argv, "motion_control");
     MotionControl motion_control;
     Parameter xParam;
     std_msgs::Int32 xdata;
 
-    robotcontrol::Trajectory pose_;
+    robotcontrol::Pose pose_;
+    robotcontrol::Pose zmp_;
 
     ros::NodeHandle node_handle("");
 
@@ -450,26 +456,31 @@ int main(int argc,char** argv){
 
     //Grafik frequency
     ros::Publisher freq_gen_ = node_handle.advertise<std_msgs::Int32>("/freq_gen", 10);
-    ros::Publisher pose_gen_ = node_handle.advertise<robotcontrol::Trajectory>("/pose_gen", 10);
+    ros::Publisher pose_gen_ = node_handle.advertise<robotcontrol::Pose>("/pose_gen", 10);
+    ros::Publisher pose_zmp_ = node_handle.advertise<robotcontrol::Pose>("/pose_zmp", 10);
 
     ros::Rate loop_rate(ITERATION_FREQUENCY);
     motion_control.setDXLData(254,32,100);
     motion_control.setDXLData(254,32,100);
     motion_control.setDXLData(254,32,100);
-    control_enable=true;
+    control_enable=CONTROL_ENABLE;
     while(ros::ok()){
         motion_control.State();
     	// Graph System-----------------------------------------
-    	//pose_.x1=yFoot1;
-    	//pose_.x2=yFoot2;
-    	//pose_gen_.publish(pose_);
+    	pose_.x=zFoot1;
+    	pose_.y=abs(xFoot1);
+    	pose_gen_.publish(pose_);
+
+        zmp_.x=((acc1*ROBOT_HEIGHT)/10);
+        zmp_.y=((acc2*ROBOT_HEIGHT)/10);
+        pose_zmp_.publish(zmp_);
 
     	//xdata.data=1;
     	//freq_gen_.publish(xdata);
     	//xdata.data=0;
     	//freq_gen_.publish(xdata);
     	////////////////////////////////////////////////////////
-      //ROS_INFO("State:%d Motion:%d Y:%d X:%d",state,motion,GoalPosition[18],GoalPosition[19]);
+        ROS_INFO("State:%d Motion:%d Y:%d X:%d",state,motion,GoalPosition[18],GoalPosition[19]);
     	//ROS_INFO("Running Motion..");
     	loop_rate.sleep();
     	ros::spinOnce();

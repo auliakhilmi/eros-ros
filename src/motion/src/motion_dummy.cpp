@@ -44,13 +44,13 @@ int main(int argc,char** argv){
 		motion_dummy.pubMotion();
 		if(t<4000){
 			motion.motion=10;
-		}else
-		if(t<9000){
-			motion.state=KICK;
-			motion.motion=6;
+		//}else
+		//if(t<9000){
+		//	motion.state=KICK;
+		//	motion.motion=6;
 		}else{
 			motion.state=WALK;
-			motion.motion=0;
+			//motion.motion=0;
 		}
 		t++;
 		ROS_INFO("t:%d",t);

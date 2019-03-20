@@ -21,7 +21,7 @@ float AngleBody = 0, lastAngleBody = 0;
 unsigned char Mode, Action, DataTX, DataTY, ready, it, DataPC[8], Servo[2];
 
 //Control Variable
-int8_t acc1=0,acc2=0,gyro1=0,gyro2=0;
+double acc1=0,acc2=0,gyro1=0,gyro2=0;
 double lastErr_x,lastErr_y,lastGyroX,lastGyroY;
 double Xgyro,Ygyro;
 double err_x,err_y;

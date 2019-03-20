@@ -16,8 +16,9 @@
 #include <boost/thread/thread.hpp>
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/Int32.h>
-#include <robotcontrol/Razor.h>
+#include <robotcontrol/LowLevel.h>
 #include <robotcontrol/Trajectory.h>
+#include <robotcontrol/Pose.h>
 #include <robotcontrol/Motion.h>
 #include "motion/motion4step.h"
 
@@ -39,7 +40,7 @@ class MotionControl{
 		ros::Publisher time_counter_;
 
 		//Subscriber
-		ros::Subscriber razor_sub_;
+		ros::Subscriber serial_sub_;
 		ros::Subscriber motion_sub_;
 		ros::Subscriber dservo;
 
@@ -71,6 +72,7 @@ class MotionControl{
 		void StandUp_End();
 
 		void InertialFeedback();
+		void calculateZMP();
 		void basicMotion();
 		void syncWrite();
 		void setDXLData(unsigned int ID, unsigned int datae, unsigned int GoalPos);
@@ -103,7 +105,7 @@ class MotionControl{
 		void getDynamixelInst();
 		void setOperatingMode();
 		void setSyncFunction();
-		void razorCallback(const robotcontrol::Razor::ConstPtr &msg);
+		void serialCallback(const robotcontrol::LowLevel::ConstPtr &msg);
 		void motionCallback(const robotcontrol::Motion::ConstPtr &msg);
 		void setservo(const std_msgs::Int32::ConstPtr &msg);
 		int configure_port(int fd);

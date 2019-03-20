@@ -15,8 +15,11 @@
     <param name="device_name"          value="$(arg device_name)"/>
     <param name="baud_rate"            value="$(arg baud_rate)"/>
     <param name="protocol_version"     value="$(arg protocol_version)"/>
-
     <param name="joint_controller"     value="$(arg joint_controller)"/>
   </node>
-  <node pkg="robotcontrol" type="razor_stream" name="razor_stream" required="true" output="screen"/>
+  <node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+    <param name="baud" value="57600"/>
+  </node>
+  <!--<node pkg="robotcontrol" type="razor_stream" name="razor_stream" required="true" output="screen"/>-->
 </launch>

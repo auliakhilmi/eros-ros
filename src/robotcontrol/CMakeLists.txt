@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
-add_message_files( FILES Razor.msg Trajectory.msg Motion.msg)
+add_message_files( FILES Razor.msg Trajectory.msg Motion.msg LowLevel.msg Pose.msg)
 
 generate_messages(
   DEPENDENCIES std_msgs
@@ -42,7 +42,11 @@ add_executable(razor_stream src/razor_stream.cpp)
 target_link_libraries(razor_stream ${catkin_LIBRARIES})
 add_dependencies(razor_stream ${catkin_EXPORTED_TARGETS})
 
-install(TARGETS razor_stream
+add_executable(serial_stream src/serial_stream.cpp)
+target_link_libraries(serial_stream ${catkin_LIBRARIES})
+add_dependencies(serial_stream ${catkin_EXPORTED_TARGETS})
+
+install(TARGETS razor_stream serial_stream
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
