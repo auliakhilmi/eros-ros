@@ -436,17 +436,17 @@ void Motion4step::FallDetect(){
     if((DataJatuh_total - tresh_x) < (-40)){
         if(state!=STANDUP)  state=FALL; 
                             Fall=FrontFall;
-        if(acc1 > 10)       Fall=10;
-        else if(acc1 < -10) Fall=20;
+        if(acc_y > 10)       Fall=10;
+        else if(acc_y < -10) Fall=20;
     }else if((DataJatuh_total - tresh_x) < -40){
         if(state!=STANDUP)  Fall=FrontFall;
-        if(acc1>10)         Fall=10;
-        else if(acc1<-10)   Fall=20;
+        if(acc_y>10)         Fall=10;
+        else if(acc_y<-10)   Fall=20;
     }else if((DataJatuh_total - tresh_x) > 48){
         if(state!=STANDUP)  state=FALL;
                             Fall=BackFall;
-        if(acc1>10)         Fall=30;
-        else if(acc1<-10)   Fall=40;
+        if(acc_y>10)         Fall=30;
+        else if(acc_y<-10)   Fall=40;
     }
     if((DataJatuh_total - tresh_x) > 20 && motion < 40){
         //yaw=0;

@@ -7,11 +7,21 @@
 #include <ros.h>
 #include <robotcontrol/LowLevel.h>
 
+#define MAX_PUSHB 4
+
 ros::NodeHandle  nh;
 robotcontrol::LowLevel lowlevel;
 ros::Publisher pub_("lowlevel", &lowlevel);
 
 MPU6050 mpu;
+char PUSHB[4]={10,11,12,13};
+char led[4]={2,3,4,5};
+int i,j;
+
+void reset(){
+  for(j=0; j<MAX_PUSHB;j++)
+    digitalWrite(led[j],LOW);
+}
 
 void setup(){
   Serial.begin(57600);
@@ -25,6 +35,12 @@ void setup(){
   
   mpu.calibrateGyro();
   mpu.setThreshold(3);
+  
+  for(i=0; i<MAX_PUSHB;i++){
+    pinMode(PUSHB[i],INPUT); digitalWrite(PUSHB[i],HIGH); 
+    pinMode(led[i],OUTPUT);  digitalWrite(led[i],LOW);
+  }
+  
 }
 
 void loop(){
@@ -35,9 +51,20 @@ void loop(){
   lowlevel.acc_y=normAccel.YAxis;
   lowlevel.acc_z=normAccel.ZAxis;
 
-  lowlevel.gyro_x=normGyro.XAxis;
-  lowlevel.gyro_y=normGyro.YAxis;
+  lowlevel.gyro_x=normGyro.YAxis;
+  lowlevel.gyro_y=normGyro.XAxis;
   lowlevel.gyro_z=normGyro.ZAxis;
+  
+  for(i=0;i<MAX_PUSHB;i++){
+    if(digitalRead(PUSHB[i])==LOW){
+      delay(60);
+      if(digitalRead(PUSHB[i])==LOW){
+        reset();
+        digitalWrite(led[i],HIGH);
+        lowlevel.pushb=i+1;
+      }
+    }
+  }
   
   pub_.publish(&lowlevel);
   nh.spinOnce();

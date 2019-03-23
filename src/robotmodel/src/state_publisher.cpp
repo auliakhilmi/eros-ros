@@ -29,7 +29,7 @@ void motion_callback(const std_msgs::UInt32 &msg)
 }
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "model_publisher");
+    ros::init(argc, argv, "state_publisher");
     ros::NodeHandle n;
     ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1);
     tf::TransformBroadcaster broadcaster;
@@ -59,7 +59,7 @@ int main(int argc, char** argv) {
     {
         id_motor[i] = 0;
     }
-    motors.update_data_command();
+    motors.update_data();
     imu.update_imu();
 
     while (ros::ok()) {
@@ -91,8 +91,7 @@ int main(int argc, char** argv) {
 
         for(int a=0; a<20; a++)
         {
-		joint_state.position[a] = 2048;
-            //joint_state.position[a] = motors.current_pos[a+1];
+            joint_state.position[a] = motors.current_pos[a+1];
         }
 
         float penjumlah_x = 0.0, penjumlah_y = 0.0, penjumlah_z = 0.0;
@@ -138,7 +137,7 @@ int main(int argc, char** argv) {
 
         // This will adjust as needed per iteration
       ros::spinOnce();
-      //loop_rate.sleep();
+      loop_rate.sleep();
     }
 
 

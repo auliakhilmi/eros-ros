@@ -7,8 +7,12 @@
   <arg name="device_name"            default="/dev/ttyUSB0"/>
   <arg name="baud_rate"              default="1000000"/>
   <arg name="protocol_version"       default="2.0"/>
-
   <arg name="joint_controller"       default="position_mode"/>
+
+  <node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+    <param name="baud" value="57600"/>
+  </node>
 
   <node pkg="motion" type="motion_control" name="motion_control" required="true" output="screen">
     <param name="robot_name"           value="$(arg use_robot_name)"/>
@@ -16,10 +20,6 @@
     <param name="baud_rate"            value="$(arg baud_rate)"/>
     <param name="protocol_version"     value="$(arg protocol_version)"/>
     <param name="joint_controller"     value="$(arg joint_controller)"/>
-  </node>
-  <node pkg="rosserial_python" type="serial_node.py" name="serial_node" output="screen">
-    <param name="port" value="/dev/ttyUSB0"/>
-    <param name="baud" value="57600"/>
   </node>
   <!--<node pkg="robotcontrol" type="razor_stream" name="razor_stream" required="true" output="screen"/>-->
 </launch>

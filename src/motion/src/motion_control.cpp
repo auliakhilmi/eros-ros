@@ -45,32 +45,32 @@ void MotionControl::InertialFeedback(){
     tresh_y=0;
     MassHead=0;
 
-    if(false){
-        err_y=acc1-tresh_y;
+    if(true){
+        err_y=acc_y-tresh_y;
         Y=err_y*3+(err_y-lastErr_y)*5+(err_y+lastErr_y)*2;
 
-        err_x=tresh_x-acc2;
+        err_x=tresh_x-acc_x;
 
         pI -= ((float)err_x + (float)(err_x-lastErr_x)*3)/35;
-        if(err_x > -7 && err_x < 5)pI=0;
+        //if(err_x > -7 && err_x < 5)pI=0;
 
         D_x=(err_x-lastErr_x);
         if(D_x<10&&D_x>-10){
-            XX=err_x*7+D_x*10;//+(err_x+lastErr_x)*2;
+            XX=err_x*7+D_x*2;//+(err_x+lastErr_x)*2;
         }else if(D_x<20&&D_x>-20){
-            XX=err_x*6+D_x*50;//+(err_x+lastErr_x)*2;
+            XX=err_x*6+D_x*5;//+(err_x+lastErr_x)*2;
         }else{
-            XX=err_x*5+D_x*100;//+(err_x+lastErr_x)*2;
+            XX=err_x*5+D_x*10;//+(err_x+lastErr_x)*2;
         }
         
         if(XX>400)XX=400;
         else if(XX<-400)XX=-400; 
 
         if(Xgyro>0){
-            Xgyro=gyro1/3+(gyro1-lastGyroX)/2;
-        }else Xgyro=gyro1/2+(gyro1-lastGyroX)/4;
+            Xgyro=gyro_x/4+(gyro_x-lastGyroX)/2;
+        }else Xgyro=gyro_x/2+(gyro_x-lastGyroX)/4;
 
-        Ygyro=gyro2/2+(gyro2-lastGyroY)/8;
+        Ygyro=gyro_y/2+(gyro_y-lastGyroY)/8;
 
         //MassHead = (2400-GoalPosition[18])/80;
         //if(MassHead <= 0)MassHead = 0;
@@ -80,8 +80,8 @@ void MotionControl::InertialFeedback(){
         else if(Xgyro < -200)Xgyro = -200;
     }
 
-    DefaultServo[0]=DS_Origin[0]+(XX);     //ID1
-    DefaultServo[1]=DS_Origin[1]-(XX);     //ID2
+    DefaultServo[0]=DS_Origin[0]+(XX*3);     //ID1
+    DefaultServo[1]=DS_Origin[1]-(XX*3);     //ID2
     DefaultServo[2]=DS_Origin[2]-(Y);      //ID3
     if(DefaultServo[2]<DS_Origin[2]-200)DefaultServo[2]=DS_Origin[2]-200;
     DefaultServo[3]=DS_Origin[3]-(Y);      //ID4
@@ -94,14 +94,14 @@ void MotionControl::InertialFeedback(){
         DefaultServo[11]=DS_Origin[11]-Xgyro*1/4 + XX/5 + pI/2;//#21/5/2016                //ID12
         DefaultServo[12]=DS_Origin[12]-Xgyro*3/4 - XX/6 - pI/2;//#21/5/2016 "*5/4 - XX/6   //ID13
         DefaultServo[13]=DS_Origin[13]+Xgyro*3/4 + XX/6 + pI/2;//#21/5/2016                //ID14
-        DefaultServo[14]=DS_Origin[14]+Xgyro*3/4   + MassHead + pI;// - val;           //ID15
-        DefaultServo[15]=DS_Origin[15]-Xgyro*3/4 - MassHead - pI;// + val;             //ID16
+        DefaultServo[14]=DS_Origin[14]+Xgyro*3/4 + MassHead + pI/2;// - val;           //ID15
+        DefaultServo[15]=DS_Origin[15]-Xgyro*3/4 - MassHead - pI/2;// + val;             //ID16
     } else {
         DefaultServo[10]=DS_Origin[10]+Xgyro*1/4 - XX/6;//#21/5/2016   "Xgyro*3/4          //ID11
         DefaultServo[11]=DS_Origin[11]-Xgyro*1/4 + XX/6;//#21/5/2016                       //ID12 
         DefaultServo[12]=DS_Origin[12]-Xgyro*3/4 - XX/6;//#21/5/2016   "Xgyro*5/4          //ID13
         DefaultServo[13]=DS_Origin[13]+Xgyro*3/4 + XX/6;//#21/5/2016                       //ID14
-        DefaultServo[14]=DS_Origin[14]+Xgyro*1/4   + MassHead - XX/4;// - val*3;       //ID15
+        DefaultServo[14]=DS_Origin[14]+Xgyro*1/4 + MassHead - XX/4;// - val*3;       //ID15
         DefaultServo[15]=DS_Origin[15]-Xgyro*1/4 - MassHead + XX/4;// + val*3;         //ID16
     }   
     if(Ygyro>0){
@@ -118,28 +118,39 @@ void MotionControl::InertialFeedback(){
 
     lastErr_x=err_x; 
     lastErr_y=err_y;
-    lastGyroX=gyro1;
-    lastGyroY=gyro2;
+    lastGyroX=gyro_x;
+    lastGyroY=gyro_y;
     //ROS_INFO("[%1.2f][%1.2f][%1.2f][%1.2f][%1.2f]",pI,Xgyro,Ygyro,XX,Y);
 }
 
 void MotionControl::serialCallback(const robotcontrol::LowLevel::ConstPtr &msg){
-    acc1 = msg->acc_x;
-    acc2 = msg->acc_y;
-    gyro1 = msg->gyro_x;
-    gyro2 = msg->gyro_y;
+    acc_x = msg->acc_x;
+    acc_y = msg->acc_y;
+    gyro_x = msg->gyro_x;
+    gyro_y = msg->gyro_y;
+    pushb = msg->pushb;
+
+    if(pushb==1){
+        state=WALK;
+        motion=10;
+    }else 
+    if(pushb==2){
+        state=WALK;
+        motion=0;
+    }
+
 
     //-------------------------
     //Fall Detection// DataJatuh_total as parameter for fallDetect
     countJatuh++;
-    DataJatuh+=acc2;
+    DataJatuh+=acc_x;
     if(countJatuh>=10){
       DataJatuh_total=(DataJatuh/10);
       countJatuh=DataJatuh=0;
     }
     //-------------------------
 
-    //ROS_INFO("[%d][%d][%d][%d]",acc1,acc2,gyro1,gyro2);
+    //ROS_INFO("[%d][%d][%d][%d]",acc_x,acc_y,gyro_x,gyro_y);
 }
 
 void MotionControl::motionCallback(const robotcontrol::Motion::ConstPtr &msg){
@@ -467,12 +478,12 @@ int main(int argc,char** argv){
     while(ros::ok()){
         motion_control.State();
     	// Graph System-----------------------------------------
-    	pose_.x=zFoot1;
-    	pose_.y=abs(xFoot1);
+    	pose_.x=abs(xFoot1);
+    	pose_.y=zFoot1;
     	pose_gen_.publish(pose_);
 
-        zmp_.x=((acc1*ROBOT_HEIGHT)/10);
-        zmp_.y=((acc2*ROBOT_HEIGHT)/10);
+        zmp_.x=((acc_x*ROBOT_HEIGHT)/10);
+        zmp_.y=((acc_y*ROBOT_HEIGHT)/10);
         pose_zmp_.publish(zmp_);
 
     	//xdata.data=1;

@@ -943,15 +943,18 @@
 
 <!-- Kaki Kiri -->
 
-
-
-
-<!-- Tangan Kanan -->
+<!-- Tangan -->
 
 <joint name="leher_to_bahu_kanan" type="fixed">
     <parent link="leher"/>
     <child link="servo_bahu_roll_kanan"/>
     <origin rpy="0 0 0" xyz="0.051 0 0"/>
+</joint>
+
+<joint name="leher_to_bahu_kiri" type="fixed">
+    <parent link="leher"/>
+    <child link="servo_bahu_roll_kiri"/>
+    <origin rpy="0 0 0" xyz="-0.051 0 0"/>
 </joint>
 
 <joint name="bahu_kanan_roll" type="revolute">
@@ -962,11 +965,27 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
+<joint name="bahu_kiri_roll" type="revolute">
+    <parent link="servo_bahu_roll_kiri"/>
+    <child link="link_servo_bahu_kiri"/>
+    <origin rpy="0 0 0" xyz="-0.030 0 0"/>
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
 <joint name="bahu_kanan_pitch" type="revolute">
     <parent link="link_servo_bahu_kanan"/>
     <child link="servo_bahu_pitch_kanan"/>
     <origin rpy="0 0 0" xyz="0.010 0 -0.015"/>
-    <axis xyz="0 1 0" />
+    <axis xyz="0 -1 0" />
+    <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
+</joint>
+
+<joint name="bahu_kiri_pitch" type="revolute">
+    <parent link="link_servo_bahu_kiri"/>
+    <child link="servo_bahu_pitch_kiri"/>
+    <origin rpy="0 0 0" xyz="-0.010 0 -0.015"/>
+    <axis xyz="0 -1 0" />
     <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
 </joint>
 
@@ -976,11 +995,25 @@
     <origin rpy="0 0 0" xyz="0.061 0 0.0"/>
 </joint>
 
+<joint name="link_lengan_atas_kiri" type="fixed">
+    <parent link="servo_bahu_pitch_kiri"/>
+    <child link="link_siku_kiri"/>
+    <origin rpy="0 0 0" xyz="-0.061 0 0.0"/>
+</joint>
+
 <joint name="siku_kanan_yaw" type="revolute">
     <parent link="link_siku_kanan"/>
     <child link="servo_siku_pitch_kanan"/>
     <origin rpy="0 0 0" xyz="0.070 0 0."/>
-    <axis xyz="0 0 1" />
+    <axis xyz="0 0 -1" />
+    <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
+</joint>
+
+<joint name="siku_kiri_yaw" type="revolute">
+    <parent link="link_siku_kiri"/>
+    <child link="servo_siku_pitch_kiri"/>
+    <origin rpy="0 0 0" xyz="-0.070 0 0."/>
+    <axis xyz="0 0 -1" />
     <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
 </joint>
 
@@ -990,56 +1023,16 @@
     <origin rpy="0 0 0" xyz="0.061 0 0.0"/>
 </joint>
 
-<joint name="tangan_kanan_eof" type="fixed">
-    <parent link="lengan_bawah_kanan"/>
-    <child link="ujung_tangan_kanan"/>
-    <origin rpy="0 0 0" xyz="0.120 0 0.0"/>
-</joint>
-
-<!-- Tangan Kanan End -->
-
-<!-- Tangan Kiri -->
-
-<joint name="leher_to_bahu_kiri" type="fixed">
-    <parent link="leher"/>
-    <child link="servo_bahu_roll_kiri"/>
-    <origin rpy="0 0 0" xyz="-0.051 0 0"/>
-</joint>
-
-<joint name="bahu_kiri_roll" type="revolute">
-    <parent link="servo_bahu_roll_kiri"/>
-    <child link="link_servo_bahu_kiri"/>
-    <origin rpy="0 0 0" xyz="-0.030 0 0"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="bahu_kiri_pitch" type="revolute">
-    <parent link="link_servo_bahu_kiri"/>
-    <child link="servo_bahu_pitch_kiri"/>
-    <origin rpy="0 0 0" xyz="-0.010 0 -0.015"/>
-    <axis xyz="0 1 0" />
-    <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
-</joint>
-
-<joint name="link_lengan_atas_kiri" type="fixed">
-    <parent link="servo_bahu_pitch_kiri"/>
-    <child link="link_siku_kiri"/>
-    <origin rpy="0 0 0" xyz="-0.061 0 0.0"/>
-</joint>
-
-<joint name="siku_kiri_yaw" type="revolute">
-    <parent link="link_siku_kiri"/>
-    <child link="servo_siku_pitch_kiri"/>
-    <origin rpy="0 0 0" xyz="-0.070 0 0."/>
-    <axis xyz="0 0 1" />
-    <limit effort="300" velocity="0.1" lower="-1.57" upper="1.57"/>
-</joint>
-
 <joint name="link_lengan_bawah_kiri" type="fixed">
     <parent link="servo_siku_pitch_kiri"/>
     <child link="lengan_bawah_kiri"/>
     <origin rpy="0 0 0" xyz="-0.061 0 0.0"/>
+</joint>
+
+<joint name="tangan_kanan_eof" type="fixed">
+    <parent link="lengan_bawah_kanan"/>
+    <child link="ujung_tangan_kanan"/>
+    <origin rpy="0 0 0" xyz="0.120 0 0.0"/>
 </joint>
 
 <joint name="tangan_kiri_eof" type="fixed">
@@ -1048,9 +1041,10 @@
     <origin rpy="0 0 0" xyz="-0.120 0 0.0"/>
 </joint>
 
-<!-- Tangan Kiri End -->
+<!-- Tangan -->
 
-<!-- Kaki Kanan -->
+
+<!-- Kaki -->
 
 <joint name="base_to_hip_kanan" type="fixed">
     <parent link="base_link"/>
@@ -1059,11 +1053,26 @@
     <axis xyz="0 0 1" />
 </joint>
 
+<joint name="base_to_hip_kiri" type="fixed">
+    <parent link="base_link"/>
+    <child link="servo_hip_yaw_kiri"/>
+    <origin xyz="-0.063 0 0"/>
+    <axis xyz="0 0 1" />
+</joint>
+
 <joint name="hip_kanan_yaw" type="revolute">
     <parent link="servo_hip_yaw_kanan"/>
     <child link="servo_hip_pitch_kanan"/>
     <origin xyz="0 0 -0.060"/>
-    <axis xyz="0 0 1" />
+    <axis xyz="0 0 -1" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
+<joint name="hip_kiri_yaw" type="revolute">
+    <parent link="servo_hip_yaw_kiri"/>
+    <child link="servo_hip_pitch_kiri"/>
+    <origin xyz="0 0 -0.060"/>
+    <axis xyz="0 0 -1" />
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
@@ -1071,7 +1080,15 @@
     <parent link="servo_hip_pitch_kanan"/>
     <child link="servo_hip_roll_kanan"/>
     <origin xyz="0 0.02 0"/>
-    <axis xyz="0 1 0" />
+    <axis xyz="0 -1 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
+<joint name="hip_kiri_pitch" type="revolute">
+    <parent link="servo_hip_pitch_kiri"/>
+    <child link="servo_hip_roll_kiri"/>
+    <origin xyz="0 0.02 0"/>
+    <axis xyz="0 -1 0" />
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
@@ -1083,9 +1100,25 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
+<joint name="hip_kiri_roll" type="revolute">
+    <parent link="servo_hip_roll_kiri"/>
+    <child link="link_paha_kiri"/>
+    <origin xyz="0 0.0 0"/>
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
 <joint name="link_servo_lutut_kanan" type="fixed">
     <parent link="link_paha_kanan"/>
     <child link="servo_lutut_kanan"/>
+    <origin xyz="0 0.0 -0.1"/>
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
+<joint name="link_servo_lutut_kiri" type="fixed">
+    <parent link="link_paha_kiri"/>
+    <child link="servo_lutut_kiri"/>
     <origin xyz="0 0.0 -0.1"/>
     <axis xyz="1 0 0" />
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
@@ -1099,9 +1132,25 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
+<joint name="lutut_kiri_roll" type="revolute">
+    <parent link="servo_lutut_kiri"/>
+    <child link="link_betis_kiri"/>
+    <origin xyz="0 0.0 -0.03"/>
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
 <joint name="engkle_kanan_roll" type="revolute">
     <parent link="link_betis_kanan"/>
     <child link="servo_engkle_roll_kanan"/>
+    <origin xyz="0 0.0 -0.13"/>
+    <axis xyz="-1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
+<joint name="engkle_kiri_roll" type="revolute">
+    <parent link="link_betis_kiri"/>
+    <child link="servo_engkle_roll_kiri"/>
     <origin xyz="0 0.0 -0.13"/>
     <axis xyz="1 0 0" />
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
@@ -1115,9 +1164,25 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
+<joint name="link_servo_engkle_kiri" type="fixed">
+    <parent link="servo_engkle_roll_kiri"/>
+    <child link="servo_engkle_pitch_kiri"/>
+    <origin xyz="0 -0.051 0"/>
+    <axis xyz="1 0 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
 <joint name="telapak_kaki_kanan_pitch" type="revolute">
     <parent link="servo_engkle_pitch_kanan"/>
     <child link="telapak_kaki_kanan"/>
+    <origin xyz="0 0.025 0"/>
+    <axis xyz="0 1 0" />
+    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
+</joint>
+
+<joint name="telapak_kaki_kiri_pitch" type="revolute">
+    <parent link="servo_engkle_pitch_kiri"/>
+    <child link="telapak_kaki_kiri"/>
     <origin xyz="0 0.025 0"/>
     <axis xyz="0 1 0" />
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
@@ -1131,82 +1196,7 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
-<!-- Kaki Kanan -->
-
-<!-- Kaki Kiri -->
-
-<joint name="base_to_hip_kiri" type="fixed">
-    <parent link="base_link"/>
-    <child link="servo_hip_yaw_kiri"/>
-    <origin xyz="-0.063 0 0"/>
-    <axis xyz="0 0 1" />
-</joint>
-
-<joint name="hip_kiri_yaw" type="revolute">
-    <parent link="servo_hip_yaw_kiri"/>
-    <child link="servo_hip_pitch_kiri"/>
-    <origin xyz="0 0 -0.060"/>
-    <axis xyz="0 0 1" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="hip_kiri_pitch" type="revolute">
-    <parent link="servo_hip_pitch_kiri"/>
-    <child link="servo_hip_roll_kiri"/>
-    <origin xyz="0 0.02 0"/>
-    <axis xyz="0 1 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="hip_kiri_roll" type="revolute">
-    <parent link="servo_hip_roll_kiri"/>
-    <child link="link_paha_kiri"/>
-    <origin xyz="0 0.0 0"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="link_servo_lutut_kiri" type="fixed">
-    <parent link="link_paha_kiri"/>
-    <child link="servo_lutut_kiri"/>
-    <origin xyz="0 0.0 -0.1"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="lutut_kiri_roll" type="revolute">
-    <parent link="servo_lutut_kiri"/>
-    <child link="link_betis_kiri"/>
-    <origin xyz="0 0.0 -0.03"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="engkle_kiri_roll" type="revolute">
-    <parent link="link_betis_kiri"/>
-    <child link="servo_engkle_roll_kiri"/>
-    <origin xyz="0 0.0 -0.13"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="link_servo_engkle_kiri" type="fixed">
-    <parent link="servo_engkle_roll_kiri"/>
-    <child link="servo_engkle_pitch_kiri"/>
-    <origin xyz="0 -0.051 0"/>
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="telapak_kaki_kiri_pitch" type="revolute">
-    <parent link="servo_engkle_pitch_kiri"/>
-    <child link="telapak_kaki_kiri"/>
-    <origin xyz="0 0.025 0"/>
-    <axis xyz="0 1 0" />
-    <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
-</joint>
-
-<joint name="kaki_kanan_kiri" type="fixed">
+<joint name="kaki_kiri_eof" type="fixed">
     <parent link="telapak_kaki_kiri"/>
     <child link="telapak_kaki_kiri_eof"/>
     <origin xyz="0 0.0 -0.055"/>
@@ -1214,6 +1204,6 @@
     <limit effort="300" velocity="0.1" lower="-3.14" upper="3.14"/>
 </joint>
 
-<!-- Kaki Kiri -->
+<!-- Kaki-->
 
 </robot>
