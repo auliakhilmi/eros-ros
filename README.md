@@ -7,7 +7,7 @@
 
 ## **Documentation**
 * Motion Controller using U2D2
-* Feedback using 9DoF AHRS IMU
+* Feedback using 6-Axis MPU6050
 
 ## Setting Arduino
 ```
