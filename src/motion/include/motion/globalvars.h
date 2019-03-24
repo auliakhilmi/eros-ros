@@ -28,7 +28,7 @@ double Xgyro,Ygyro;
 double err_x,err_y;
 double pI,XX,D_x,Y;
 double MassHead;
-int tresh_y, tresh_x;
+double tresh_y, tresh_x;
 bool control_enable, HeadControl;
 ///////////////////////////////////////////////
 

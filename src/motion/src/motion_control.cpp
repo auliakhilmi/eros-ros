@@ -41,11 +41,10 @@ void MotionControl::initSerial(){
 }
 
 void MotionControl::InertialFeedback(){
-    tresh_x=0;
+    tresh_x=1.7;
     tresh_y=0;
     MassHead=0;
-
-    if(true){
+    if(control_enable){
         err_y=acc_y-tresh_y;
         Y=err_y*3+(err_y-lastErr_y)*5+(err_y+lastErr_y)*2;
 
@@ -78,13 +77,17 @@ void MotionControl::InertialFeedback(){
             
         if(Xgyro > 200)Xgyro = 200;
         else if(Xgyro < -200)Xgyro = -200;
+    }else{
+        Xgyro=Ygyro=0;
+        XX=Y=0;
+        pI=0;
     }
 
     DefaultServo[0]=DS_Origin[0]+(XX*3);     //ID1
     DefaultServo[1]=DS_Origin[1]-(XX*3);     //ID2
-    DefaultServo[2]=DS_Origin[2]-(Y);      //ID3
+    DefaultServo[2]=DS_Origin[2]+(Y);      //ID3
     if(DefaultServo[2]<DS_Origin[2]-200)DefaultServo[2]=DS_Origin[2]-200;
-    DefaultServo[3]=DS_Origin[3]-(Y);      //ID4
+    DefaultServo[3]=DS_Origin[3]+(Y);      //ID4
     if(DefaultServo[3]>DS_Origin[3]+200)DefaultServo[3]=DS_Origin[3]+200;
     DefaultServo[4]=DS_Origin[4]-(XX*3/3);   //ID5
     DefaultServo[5]=DS_Origin[5]+(XX*3/3);   //ID6
@@ -131,10 +134,16 @@ void MotionControl::serialCallback(const robotcontrol::LowLevel::ConstPtr &msg){
     pushb = msg->pushb;
 
     if(pushb==1){
+        control_enable=true;
         state=WALK;
         motion=10;
     }else 
     if(pushb==2){
+        control_enable=false;
+        state=WALK;
+        motion=10;
+    }else 
+    if(pushb==4){
         state=WALK;
         motion=0;
     }
