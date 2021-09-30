@@ -8,6 +8,6 @@
 ```
 cd ~/sketchbook/libraries
 rm -rf ros_lib
-rosrun rosserial_arduino make_libraries.py .
 rosrun rosserial_client make_library.py /home/eros/sketchbook/libraries/ros_lib/ /home/eros/eros_ws/src/robotcontrol/
+rosrun rosserial_arduino make_libraries.py .
 ```
